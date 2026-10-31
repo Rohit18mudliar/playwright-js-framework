@@ -1,0 +1,23 @@
+{
+  "name": "playwrightautomation",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {   
+    "regression" : "npx playwright test --reporter=line,html,allure-playwright",
+    "webTests" : "npx playwright test --grep @Web  --reporter=line,html,allure-playwright",
+    "apiTests" : "npx playwright test --grep @API  --reporter=line,html,allure-playwright",
+    "DataDrivenTest": "npx playwright test tests/EcommercePOMDataDrivenTest.spec.js --reporter=line,html,allure-playwright"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.3.0",
+    "allure-commandline": "^2.43.0",
+    "allure-playwright": "^3.10.2",
+    "exceljs": "^3.4.0"
+  }
+}
