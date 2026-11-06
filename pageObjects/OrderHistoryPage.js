@@ -6,12 +6,12 @@ export class OrderHistoryPage {
   }
 
 async clickViewButtonForOrderId(orderID){    
-    this.rows.filter({hasText:orderID}).locator('td button.btn-primary').click(); //Click view ffor orderid
+    this.rows.filter({hasText:orderID}).getByRole('button',{name: 'View'}).click(); //Click view for orderid
     await this.page.waitForURL("**/dashboard/order-details**");
 }
 
 async getOrderIdList(){
-  const orderIDArray = await this.rows.locator('th').allTextContents(); // storing orderIDs in array
+  const orderIDArray = await this.rows.getByRole('columnheader').allTextContents(); // storing orderIDs in array
   return orderIDArray;
 }
 

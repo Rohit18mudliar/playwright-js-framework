@@ -1,0 +1,26 @@
+[
+  {
+    "name": "wrong email",
+    "email": "nobody@example.com",
+    "password": "Rahul@123",
+    "message": "Incorrect email or password."
+  },
+  {
+    "name": "wrong password",
+    "email": "rifapiv906@netoiu.com",
+    "password": "not-the-password",
+    "message": "Incorrect email or password."
+  },
+  {
+    "name": "empty email",
+    "email": "",
+    "password": "SomePass1!",
+    "message": "*Email is required"
+  },
+  {
+    "name": "empty password",
+    "email": "user@example.com",
+    "password": "",
+    "message": "*Password is required"
+  }
+]

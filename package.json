@@ -4,10 +4,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {   
+    "smoke" : "npx playwright test --grep @Smoke  --reporter=line,html,allure-playwright ",  
     "regression" : "npx playwright test --reporter=line,html,allure-playwright",
-    "webTests" : "npx playwright test --grep @Web  --reporter=line,html,allure-playwright",
-    "apiTests" : "npx playwright test --grep @API  --reporter=line,html,allure-playwright",
-    "DataDrivenTest": "npx playwright test tests/EcommercePOMDataDrivenTest.spec.js --reporter=line,html,allure-playwright"
+    "apiTests" : "npx playwright test --grep @API  --reporter=line,html,allure-playwright"  
   },
   "keywords": [],
   "author": "",

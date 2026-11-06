@@ -1,13 +1,12 @@
 export class ApiUtils{
 
-    constructor(apiContext,loginPayload){  // Common values in constructor for reusability
+    constructor(apiContext,loginPayload){  
         this.apiContext = apiContext;
         this.loginPayload = loginPayload;
     };
 
     async getToken(){
-        // Login using API 
-   
+        // Login using API    
         const loginResponse = await this.apiContext.post(
                                                         "https://rahulshettyacademy.com/api/ecom/auth/login",
                                                         {
@@ -16,7 +15,6 @@ export class ApiUtils{
                                                     );
         const loginResponseJson = await loginResponse.json();
         const token = loginResponseJson.token;
-        console.log(token);
         return token;
 
     }
@@ -24,8 +22,7 @@ export class ApiUtils{
     async createOrder(createOrderPayload){
 
         let response = {};
-        response.token = await this.getToken();
-        
+        response.token = await this.getToken();        
         // Create Order using API
         const createOrderResponse = await this.apiContext.post(
                                                             'https://rahulshettyacademy.com/api/ecom/order/create-order',
@@ -43,6 +40,30 @@ export class ApiUtils{
         console.log(createOrderResponseJson);
         console.log('orderId : '+ orderId);
         response.orderId = orderId;
+        return response;
+    }
+
+   async addToCart(addToCartPayload){
+
+        let response = {};
+        response.token = await this.getToken();
+        
+        // Add To cart using API
+        const addToCartResponse = await this.apiContext.post(
+                                                            'https://rahulshettyacademy.com/api/ecom/user/add-to-cart',
+                                                            {
+                                                                data:addToCartPayload,
+                                                                headers:{
+                                                                            'Authorization' : response.token ,
+                                                                            'Content-Type' : 'application/json',
+
+                                                                        }
+                                                            }
+                                                        );
+        const addToCartResponseJson = await addToCartResponse.json();
+        const message =addToCartResponseJson.message;
+        console.log(addToCartResponseJson);
+        response.message = message;
         return response;
     }
 

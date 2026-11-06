@@ -25,9 +25,7 @@ pipeline {
         }
         stage('Run Tests') {
             steps {
-              // bat 'call npm run regression'
-				bat 'call npm run DataDrivenTest'
-				
+                bat 'call npm run regression'
             }
         }
     }

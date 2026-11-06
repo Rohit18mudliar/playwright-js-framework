@@ -1,4 +1,3 @@
-// @ts-check
 import { defineConfig, devices } from '@playwright/test';
 
 /**
@@ -13,19 +12,15 @@ import { defineConfig, devices } from '@playwright/test';
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
+
   testDir: './tests',
   timeout:20*1000, // in Milliseconds
   expect:{timeout:20000}, 
   reporter: 'html', /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  workers : 5,
-  /* Run tests in files in parallel */
-  fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
-  forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
-  retries: process.env.CI ? 1 : 0,
-  /* Opt out of parallel tests on CI. */
-  // workers: process.env.CI ? 1 : undefined,
+  fullyParallel: true,  /* Run tests in files in parallel */ 
+  forbidOnly: !!process.env.CI,  /* Fail the build on CI if you accidentally left test.only in the source code. */
+  retries: process.env.CI ? 1 : 0,   /* Retry on CI only */
+  workers: process.env.CI ? 1 : undefined,  /* Opt out of parallel tests on CI. */
   
   
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -36,9 +31,8 @@ export default defineConfig({
     screenshot: 'on',     
     trace: 'on',  /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     video:'retain-on-failure',
-    // headless:false,
-    /* Base URL to use in actions like `await page.goto('')`. */
-    baseURL: process.env.BASE_URL,
+    // headless:false,   
+    baseURL: process.env.BASE_URL ?? 'https://rahulshettyacademy.com/client/' , /* Base URL to use in actions like `await page.goto('')`. */
   
   },
 
@@ -80,11 +74,5 @@ export default defineConfig({
   //   // },
   // ],
 
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
 });
 

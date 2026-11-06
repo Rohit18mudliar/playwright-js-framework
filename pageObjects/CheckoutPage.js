@@ -4,13 +4,13 @@ export class CheckoutPage {
     this.page = page;
     this.expect = expect;
     this.userLabelElement = page.locator("div.user__name  label");
-    this.cvv = page.locator("div.field input.txt").nth(2);
+    this.cvv = page.locator("div.field").filter({hasText : 'CVV Code '}).locator('input.txt');
     this.coupon = page.locator('[name="coupon"]');
-    this.couponApplyButton = page.locator("button.btn-primary");
-    this.couponAppliedMessage = page.locator("p.ng-star-inserted");
-    this.countryDropdown = page.locator('[placeholder="Select Country"]');
+    this.couponApplyButton = page.getByRole('button',{name: 'Apply Coupon'});    
+    this.couponAppliedMessage = page.getByText('Coupon Applied');    
+    this.countryDropdown = page.getByPlaceholder("Select Country");
     this.countryDropdownOptions = page.locator("section.ta-results");
-    this.placeOrderButton = page.locator('div.actions a');
+    this.placeOrderButton = page.getByText('Place Order ');
   }
 
   async getUserLabelElement() {
@@ -34,16 +34,12 @@ export class CheckoutPage {
   }
 
   async fillCountryDropdown() {
-    await this.countryDropdown.pressSequentially("ind");
+
+    await this.countryDropdown.pressSequentially('ind', { delay: 100 });
     await this.countryDropdownOptions.waitFor();
-    const optionCount = await this.countryDropdownOptions.locator("button").count();
-    for (let i = 0; i < optionCount; i++) {
-      const text = await this.countryDropdownOptions.locator("button").nth(i).textContent();
-      if (text === " India") {
-        await this.countryDropdownOptions.locator("button").nth(i).click();
-        break;
-      }
-    }
+    await this.countryDropdownOptions.locator('button').filter({ hasText: /^ India$/ }).click();
+    await this.expect(this.countryDropdown).toHaveValue('India');
+
   }
 
   async clickPlaceOrder(){
