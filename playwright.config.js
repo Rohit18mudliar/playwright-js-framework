@@ -20,7 +20,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',     
     trace: 'retain-on-failure',  
     video:'retain-on-failure',    
-    baseURL: process.env.BASE_URL ?? 'https://rahulshettyacademy.com/client/' ,   
+    baseURL: process.env.BASE_URL || 'https://rahulshettyacademy.com/client/',   
   },
 
   /* Configure projects for major browsers */
