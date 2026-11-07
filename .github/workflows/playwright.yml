@@ -30,36 +30,37 @@ jobs:
       run: npm ci 
     - name: Run shard ${{ matrix.shard }}/4
       run: npx playwright test --shard=${{ matrix.shard }}/4
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       if: ${{ !cancelled() }}
       with:
         name: blob-report-${{ matrix.shard }}
         path: blob-report
-        retention-days: 7          
+        if-no-files-found: error
+        retention-days: 7         
   merge-reports:
     if: ${{ !cancelled() }}
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: lts/*
           cache: npm
       - run: npm ci
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           path: all-blob-reports
           pattern: blob-report-*
           merge-multiple: true
       - run: npx playwright merge-reports --reporter html ./all-blob-reports
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: html-report
           path: playwright-report
           retention-days: 14  
       - name: Send email on failure
-        if: failure()
+        if: ${{ needs.test.result == 'failure' }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
