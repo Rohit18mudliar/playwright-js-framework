@@ -10,6 +10,11 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-24.04
+    # The job's steps run INSIDE this image.
+    # The tag must match the @playwright/test version in package.json.
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host   # avoids Chromium running out of shared memory
     env:
         BASE_URL: ${{ secrets.PRODUCTION_URL }}   # applies to ALL steps in this job
     strategy:
