@@ -9,7 +9,7 @@ on:
 jobs:
   test:
     timeout-minutes: 60
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
         BASE_URL: ${{ secrets.PRODUCTION_URL }}   # applies to ALL steps in this job
     strategy:
