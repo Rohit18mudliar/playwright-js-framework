@@ -16,7 +16,7 @@ export default defineConfig({
   testDir: './tests',
   timeout:20*1000, // in Milliseconds
   expect:{timeout:20000}, 
-  reporter: 'html', /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+  reporter: process.env.CI ? [['blob'], ['github']] : 'html', /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   fullyParallel: true,  /* Run tests in files in parallel */ 
   forbidOnly: !!process.env.CI,  /* Fail the build on CI if you accidentally left test.only in the source code. */
   retries: process.env.CI ? 1 : 0,   /* Retry on CI only */
