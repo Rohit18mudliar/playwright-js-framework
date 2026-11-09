@@ -14,6 +14,8 @@ let itemName = 'ZARA COAT 3';
 
 /******************************  Tests  ************************************************/
 
+test.describe.configure({serial:true}); // Run tests in this file in serial mode, as we are using same cart item for all tests
+
 test.beforeAll(async()=>{   
     apiContext = await request.newContext();
     apiUtils = new ApiUtils(apiContext,loginPayload); 
