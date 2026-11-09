@@ -5,7 +5,7 @@ import dataJSON from '../../testData/LoginCases.json' with {type:'json'};
 // ------------------ Valid Login & Logout ----------------------
 
 test("@Smoke Valid Login flow", async ({ page }) => {
-const username="rifapiv906@netoiu.com";
+const username="testuser6@mail.com";
 const password = "Rahul@123";
 const poManager = new POManager(page,expect);
 const loginPage = await poManager.getLoginPage();

@@ -1,7 +1,7 @@
 import { test as base, expect ,request} from "@playwright/test";
 import {POManager} from '../pageObjects/POManager.js';
 
-const loginPayload = {userEmail: "rifapiv906@netoiu.com", userPassword: "Rahul@123"};
+const loginPayload = {userEmail: "testuser5@mail.com", userPassword: "Rahul@123"};
 
 
 export const test = base.extend({

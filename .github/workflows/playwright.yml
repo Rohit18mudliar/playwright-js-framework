@@ -71,16 +71,8 @@ jobs:
           merge-multiple: true
       - name: Verify downloaded blob reports
         run: ls -R all-blob-reports
-      - name: Inspect blob zips
-        run: |
-          node --version
-          for f in all-blob-reports/*.zip; do echo "== $f"; unzip -l "$f"; done
       - name: Merge Playwright reports
-        run: |
-          set +e
-          npx playwright merge-reports --reporter html ./all-blob-reports
-          echo "merge-reports exit code: $?"
-          if [ -d playwright-report ]; then ls -la playwright-report; else echo "playwright-report was NOT created"; fi
+        run: npx playwright merge-reports --reporter html,json,junit ./all-blob-reports
       - uses: actions/upload-artifact@v7
         with:
           name: html-report
