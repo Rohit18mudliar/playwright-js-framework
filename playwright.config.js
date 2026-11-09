@@ -8,7 +8,9 @@ export default defineConfig({
   testDir: './tests',
   timeout:20*1000, // in Milliseconds, Test timeout global level
   expect:{timeout:20000}, // Assertion timeout global level
-  reporter: process.env.CI ? [['blob'], ['github']] : 'html', // Blob report for CI sharding, Html  for local testing
+  reporter: process.env.CI
+  ? [['blob'], ['github'], ['allure-playwright']]
+  : 'html', // Blob & allure report for CI sharding, Html  for local testing
   fullyParallel: true,  /* Run tests in files in parallel */ 
   forbidOnly: !!process.env.CI,  /* Fail the build on CI if you accidentally left test.only in the source code. */
   retries: process.env.CI ? 1 : 0,   /* Retry on CI only */
