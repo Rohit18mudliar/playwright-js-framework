@@ -1,4 +1,5 @@
 # Playwright JS Framework
+[![Playwright Tests](https://github.com/Rohit18mudliar/playwright-js-framework/actions/workflows/playwright.yml/badge.svg)](https://github.com/Rohit18mudliar/playwright-js-framework/actions/workflows/playwright.yml)
 
 End-to-end and API-assisted UI test automation for an e-commerce web app, built with **Playwright** and **JavaScript (ES modules)**. It uses the Page Object Model, custom fixtures, data-driven tests, tag-based suites, sharded CI runs and combined reporting.
 
