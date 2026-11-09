@@ -5,6 +5,8 @@ on:
   schedule:
     - cron: '00 02 * * *' # UTC time      
   workflow_dispatch:       # Allows manual trigger from GitHub UI
+permissions:
+  contents: read
 jobs:
   test:
     timeout-minutes: 60
@@ -43,8 +45,8 @@ jobs:
         if-no-files-found: error
         retention-days: 7
   # ------ Merge the reports -------
-  merge-reports:     # Runs even when tests failed, so you always get the final report
-    if: ${{ !cancelled() }}
+  merge-reports:
+    if: ${{ always() && !cancelled() }}
     needs: test
     runs-on: ubuntu-24.04
     steps:
@@ -59,18 +61,20 @@ jobs:
           distribution: temurin
           java-version: '17'
       - run: npm ci
-       # ---- Playwright HTML report ----
+      # ---- Playwright HTML report ----
       - uses: actions/download-artifact@v8
         with:
           path: all-blob-reports
           pattern: blob-report-*
           merge-multiple: true
+      - name: Verify downloaded blob reports
+        run: ls -R all-blob-reports
       - run: npx playwright merge-reports --reporter html ./all-blob-reports
       - uses: actions/upload-artifact@v7
         with:
           name: html-report
           path: playwright-report
-          retention-days: 14  
+          retention-days: 14
       # ---- Allure report: combine all shards, build, upload as artifact ----
       - uses: actions/download-artifact@v8
         with:
