@@ -12,12 +12,12 @@ jobs:
     # The job's steps run INSIDE this image.
     # The tag must match the @playwright/test version in package.json.
     container:
-      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      image: mcr.microsoft.com/playwright:v1.58.2-noble # must match @playwright/test
       options: --ipc=host   # avoids Chromium running out of shared memory
     env:
         BASE_URL: ${{ secrets.PRODUCTION_URL }}   # applies to ALL steps in this job
     strategy:
-      fail-fast: false
+      fail-fast: false  # one failing shard must not cancel the others
       matrix:
         shard: [1, 2, 3, 4]
     steps:
@@ -26,24 +26,40 @@ jobs:
       run: npm ci 
     - name: Run shard ${{ matrix.shard }}/4
       run: npx playwright test --shard=${{ matrix.shard }}/4
+    # Playwright blob report (merged into one HTML report later)
     - uses: actions/upload-artifact@v7
       if: ${{ !cancelled() }}
       with:
         name: blob-report-${{ matrix.shard }}
         path: blob-report
         if-no-files-found: error
-        retention-days: 7         
-  merge-reports:
+        retention-days: 7
+    # Raw Allure results from this shard (combined into one report later)
+    - uses: actions/upload-artifact@v7
+      if: ${{ !cancelled() }}
+      with:
+        name: allure-results-${{ matrix.shard }}
+        path: allure-results
+        if-no-files-found: error
+        retention-days: 7
+  # ------ Merge the reports -------
+  merge-reports:     # Runs even when tests failed, so you always get the final report
     if: ${{ !cancelled() }}
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
           node-version: lts/*
           cache: npm
+      # allure-commandline (Allure 2) needs Java to build the report
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
       - run: npm ci
+       # ---- Playwright HTML report ----
       - uses: actions/download-artifact@v8
         with:
           path: all-blob-reports
@@ -55,8 +71,22 @@ jobs:
           name: html-report
           path: playwright-report
           retention-days: 14  
+      # ---- Allure report: combine all shards, build, upload as artifact ----
+      - uses: actions/download-artifact@v8
+        with:
+          path: allure-results
+          pattern: allure-results-*
+          merge-multiple: true
+      - name: Generate Allure report
+        run: npx allure generate allure-results --clean -o allure-report
+      - uses: actions/upload-artifact@v7
+        with:
+          name: allure-report
+          path: allure-report
+          retention-days: 14
+      # ---- Send Email ------- 
       - name: Send email on failure
-        if: ${{ needs.test.result == 'failure' }}
+        if: ${{ !cancelled() && needs.test.result == 'failure' }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
