@@ -3,8 +3,7 @@ on:
   pull_request:
     branches: [ main, master ]
   schedule:
-    - cron: '00 02 * * *'   # 17:00 IST every day
-      timezone: 'Asia/Kolkata'  
+    - cron: '00 02 * * *' # UTC time      
   workflow_dispatch:       # Allows manual trigger from GitHub UI
 jobs:
   test:
