@@ -2,8 +2,8 @@ name: Playwright Tests
 on:
   pull_request:
     branches: [ main, master ]
-  schedule:
-    - cron: '00 02 * * *' # UTC time
+  # schedule:
+  #   - cron: '30 20 * * *' # UTC time -> 2 AM IST 
   workflow_dispatch:       # Allows manual trigger from GitHub UI
 permissions:
   contents: read
